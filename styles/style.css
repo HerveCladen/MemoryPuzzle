@@ -7,17 +7,17 @@ h2 {
     margin: 5px
 }
 
-.board {
+#board {
     background-color: #F5F5F5;
     display: flex;
     flex-direction: column;
     padding: 5px;
     margin: auto;
-    width: 240px  
 }
 
 .row {
-    display: flex
+    display: flex;
+    margin: auto
 }
 
 .scene {
@@ -53,6 +53,5 @@ h2 {
 }
 
 .back {
-    background: blue;
     transform: rotateY(180deg);
 }
