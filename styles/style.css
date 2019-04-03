@@ -2,6 +2,10 @@
     margin: 0
 }
 
+html {
+    font-family: "Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+
 h2 {
     text-align: center;
     margin: 5px
@@ -39,6 +43,7 @@ h2 {
 
 .card.is-flipped {
     transform: rotateY(180deg);
+    cursor: default;
 }
 
 .card-face {
@@ -54,4 +59,10 @@ h2 {
 
 .back {
     transform: rotateY(180deg);
+    text-align: center;
+    vertical-align: middle;
+    line-height: 50px;
+    font-size: 1.5rem;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
