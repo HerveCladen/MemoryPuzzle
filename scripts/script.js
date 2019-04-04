@@ -1,14 +1,16 @@
 window.onload = generation(4,5);
 
-var previouslyFlipped, counter = 0;
+var previouslyFlipped, cardFlipped;
 
 function generation(rowsInsert, columnsInsert) {
-    counter = 0;
+    cardFlipped = false;
+
     let board = document.getElementById("board");
     board.innerHTML = "";
     for(i = 0; i < rowsInsert; i++) {
         board.innerHTML += '<div class="row"></div>';
     }
+
     let rows = document.querySelectorAll(".row");
     rows.forEach(function(row) {
         for(i = 0; i < columnsInsert; i++) {
@@ -25,26 +27,26 @@ function generation(rowsInsert, columnsInsert) {
 
     var pairs = cards.length / 2, number;
     for(i = 0; i < cards.length; i++) {
-        number = cardNumbers[i];
-        cards[i].lastElementChild.innerHTML = number > pairs ? number - pairs : number; 
-        cards[i].lastElementChild.style.background = colorCode(pairs, number > pairs ? number - pairs : number);
+        number = cardNumbers[i] > pairs ? cardNumbers[i] - pairs : cardNumbers[i];
+        cards[i].lastElementChild.innerHTML = number; 
+        cards[i].lastElementChild.style.background = colorCode(pairs, number);
     }
 
     cards.forEach(function (elem) {
         elem.addEventListener("click", function () {
             if(!elem.classList.contains('is-flipped')) {
                 elem.classList.add('is-flipped');
-                if (counter == 0) {
+                if (cardFlipped == false) {
                     previouslyFlipped = elem;
-                    counter++;
-                } else {
-                    counter = 0;
+                    cardFlipped = true;
+                } else {                    
                     if(elem.innerHTML != previouslyFlipped.innerHTML) {
                         setTimeout(function(){
                             elem.classList.remove('is-flipped');
                             previouslyFlipped.classList.remove('is-flipped');
-                        }, 750);                                            
+                        }, 650);                                            
                     }
+                    cardFlipped = false;
                 }
                 checkFlipped();
             }
@@ -59,7 +61,6 @@ function colorCode(pairs, number){
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
-  
     while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
@@ -71,29 +72,26 @@ function shuffle(array) {
 }
 
 function checkFlipped() {
-    var r = true;
+    var allFlipped = true;
     document.querySelectorAll(".card").forEach(function (elem) {
         if(!elem.classList.contains('is-flipped')) {
-            r = false;
+            allFlipped = false;
         }
     })
-    if(r) {
-        alert("All cards are flipped");
+    if(allFlipped) {
+        setTimeout(() => { 
+            alert("You found all pairs! Great job!");        
+        }, 100);
     }
 }
 
-document.getElementById("board-generate").onclick = function() { 
-    Generate(); 
-}
+document.getElementById("board-generate").addEventListener("click", Generate);
 
 function Generate() {
-    var rowIndex = document.getElementById("board-rows").selectedIndex;
-    var rows = document.getElementById("board-rows").options;
-    var columnIndex = document.getElementById("board-columns").selectedIndex;
-    var columns = document.getElementById("board-columns").options;
+    var rows = document.getElementById("board-rows").options[document.getElementById("board-rows").selectedIndex].text;
+    var columns = document.getElementById("board-columns").options[document.getElementById("board-columns").selectedIndex].text;
 
-    console.log(rows[rowIndex].text + " " + columns[columnIndex].text)
-    if(!isNaN(rows[rowIndex].text) && !isNaN(columns[columnIndex].text) && ((rows[rowIndex].text * columns[columnIndex].text) % 2) == 0) {
-        generation(rows[rowIndex].text, columns[columnIndex].text);
+    if(!isNaN(rows) && !isNaN(columns) && ((rows * columns) % 2) == 0) {
+        generation(rows, columns);
     }
 }
