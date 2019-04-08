@@ -1,8 +1,10 @@
 window.onload = generation(4, 5);
-
-var previouslyFlipped, cardFlipped;
+var attemptsLeft, isFrozen, previouslyFlipped, cardFlipped, hasLost;
 
 function generation(rowsInsert, columnsInsert) {
+    attemptsLeft = 10;
+    hasLost = false;
+    document.getElementById("attempts").innerHTML = attemptsLeft + " attempts left";
     cardFlipped = false;
 
     let board = document.getElementById("board");
@@ -31,20 +33,38 @@ function generation(rowsInsert, columnsInsert) {
         cards[i].lastElementChild.innerHTML = number;
         cards[i].lastElementChild.style.background = colorCode(pairs, number);
     }
-
+    isFrozen = false;
     cards.forEach(function (elem) {
         elem.addEventListener("click", function () {
-            if (!elem.classList.contains('is-flipped')) {
+            if (!elem.classList.contains('is-flipped') && !isFrozen && !hasLost) {
                 elem.classList.add('is-flipped');
                 if (cardFlipped == false) {
                     previouslyFlipped = elem;
                     cardFlipped = true;
                 } else {
                     if (elem.innerHTML != previouslyFlipped.innerHTML) {
+                        isFrozen = true;
+                        attemptsLeft--;
+                        document.getElementById("attempts").innerHTML = attemptsLeft + " attempts left";
                         setTimeout(function () {
                             elem.classList.remove('is-flipped');
                             previouslyFlipped.classList.remove('is-flipped');
-                        }, 700);
+                            isFrozen = false;
+                        }, 800);
+                        if(attemptsLeft == 0) {
+                            setTimeout(function () {
+                                alert("You ran out of attempts, try again later.");
+                            }, 300);                
+                            hasLost = true;
+                            cards.forEach(function(e){
+                                elem.classList.remove('is-flipped');
+                                previouslyFlipped.classList.remove('is-flipped');
+                                e.style.transform = "rotateY(180deg)";
+                                if(!e.classList.contains("is-flipped")) {
+                                    e.style.outline = "2px solid red";                                    
+                                }
+                            })
+                        }
                     }
                     cardFlipped = false;
                 }
