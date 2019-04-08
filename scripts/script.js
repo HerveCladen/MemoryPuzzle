@@ -1,8 +1,8 @@
-window.onload = generation(4, 5);
+window.onload = generation(4, 5, 5);
 var attemptsLeft, isFrozen, previouslyFlipped, cardFlipped, hasLost;
 
-function generation(rowsInsert, columnsInsert) {
-    attemptsLeft = 2;
+function generation(rowsInsert, columnsInsert, difficulty) {
+    attemptsLeft = difficulty;
     hasLost = false;
     document.getElementById("attempts").innerHTML = attemptsLeft + " attempts left";
     cardFlipped = false;
@@ -112,8 +112,9 @@ document.getElementById("board-generate").addEventListener("click", Generate);
 function Generate() {
     var rows = document.getElementById("board-rows").options[document.getElementById("board-rows").selectedIndex].text;
     var columns = document.getElementById("board-columns").options[document.getElementById("board-columns").selectedIndex].text;
+    var difficulty = document.getElementById("difficulty").options[document.getElementById("difficulty").selectedIndex].value;
 
-    if (!isNaN(rows) && !isNaN(columns) && ((rows * columns) % 2) == 0) {
-        generation(rows, columns);
+    if (!isNaN(rows) && !isNaN(columns) && ((rows * columns) % 2) == 0 && difficulty != "") {
+        generation(rows, columns, difficulty);
     }
 }
