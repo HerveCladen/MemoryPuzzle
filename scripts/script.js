@@ -2,7 +2,7 @@ window.onload = generation(4, 5);
 var attemptsLeft, isFrozen, previouslyFlipped, cardFlipped, hasLost;
 
 function generation(rowsInsert, columnsInsert) {
-    attemptsLeft = 10;
+    attemptsLeft = 2;
     hasLost = false;
     document.getElementById("attempts").innerHTML = attemptsLeft + " attempts left";
     cardFlipped = false;
@@ -61,7 +61,9 @@ function generation(rowsInsert, columnsInsert) {
                                 previouslyFlipped.classList.remove('is-flipped');
                                 e.style.transform = "rotateY(180deg)";
                                 if(!e.classList.contains("is-flipped")) {
-                                    e.style.outline = "2px solid red";                                    
+                                    e.style.outline = "2px solid red";  
+                                    e.style.color = "red";
+                                    e.style.textShadow = "none";                                  
                                 }
                             })
                         }
