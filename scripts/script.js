@@ -4,38 +4,38 @@ var attemptsLeft, isFrozen, previouslyFlipped, cardFlipped, hasLost;
 function generation(rowsInsert, columnsInsert, difficulty) {
     attemptsLeft = difficulty;
     hasLost = false;
-    document.getElementById("attempts").innerHTML = attemptsLeft + " attempts left";
+    document.querySelector("#attempts").innerHTML = attemptsLeft + " attempts left";
     cardFlipped = false;
 
-    let board = document.getElementById("board");
+    let board = document.querySelector("#board");
     board.innerHTML = "";
-    for (i = 0; i < rowsInsert; i++) {
+    for (let i = 0; i < rowsInsert; i++) {
         board.innerHTML += '<div class="row"></div>';
     }
 
     let rows = document.querySelectorAll(".row");
-    rows.forEach(function (row) {
-        for (i = 0; i < columnsInsert; i++) {
+    rows.forEach(row => {
+        for (let i = 0; i < columnsInsert; i++) {
             row.innerHTML += '<div class="scene"><div class="card"><div class="card-face front"></div><div class="card-face back"></div></div></div>'
         }
     });
 
     let cards = document.querySelectorAll(".card");
     var cardNumbers = [];
-    for (i = 0; i < cards.length; i++) {
+    for (let i = 0; i < cards.length; i++) {
         cardNumbers.push(i + 1);
     }
     cardNumbers = shuffle(cardNumbers);
 
-    var pairs = cards.length / 2, number;
-    for (i = 0; i < cards.length; i++) {
+    let pairs = cards.length / 2, number;
+    for (let i = 0; i < cards.length; i++) {
         number = cardNumbers[i] > pairs ? cardNumbers[i] - pairs : cardNumbers[i];
         cards[i].lastElementChild.innerHTML = number;
         cards[i].lastElementChild.style.background = colorCode(pairs, number);
     }
     isFrozen = false;
-    cards.forEach(function (elem) {
-        elem.addEventListener("click", function () {
+    cards.forEach(elem => {
+        elem.addEventListener("click", () => {
             if (!elem.classList.contains('is-flipped') && !isFrozen && !hasLost) {
                 elem.classList.add('is-flipped');
                 if (cardFlipped == false) {
@@ -45,22 +45,22 @@ function generation(rowsInsert, columnsInsert, difficulty) {
                     if (elem.innerHTML != previouslyFlipped.innerHTML) {
                         isFrozen = true;
                         attemptsLeft--;
-                        document.getElementById("attempts").innerHTML = attemptsLeft + " attempts left";
-                        setTimeout(function () {
+                        document.querySelector("#attempts").innerHTML = attemptsLeft + " attempts left";
+                        setTimeout(() => {
                             elem.classList.remove('is-flipped');
                             previouslyFlipped.classList.remove('is-flipped');
                             isFrozen = false;
                         }, 800);
                         if(attemptsLeft == 0) {
-                            setTimeout(function () {
+                            setTimeout(() => {
                                 alert("You ran out of attempts, try again later.");
                             }, 300);                
                             hasLost = true;
-                            cards.forEach(function(e){
+                            cards.forEach((e) => {
                                 elem.classList.remove('is-flipped');
                                 previouslyFlipped.classList.remove('is-flipped');
-                                e.style.transform = "rotateY(180deg)";
                                 if(!e.classList.contains("is-flipped")) {
+                                    e.style.transform = "rotateY(180deg)";
                                     e.style.outline = "2px solid red";  
                                     e.style.color = "red";
                                     e.style.textShadow = "none";                                  
@@ -77,12 +77,12 @@ function generation(rowsInsert, columnsInsert, difficulty) {
 }
 
 function colorCode(pairs, number) {
-    var code = Math.floor(765 / pairs * number);
+    let code = Math.floor(765 / pairs * number);
     return `rgb(${Math.floor(code / 18)},${Math.floor(code / 5)},${Math.floor(code / 3)})`;
 }
 
 function shuffle(array) {
-    var currentIndex = array.length, temporaryValue, randomIndex;
+    let currentIndex = array.length, temporaryValue, randomIndex;
     while (0 !== currentIndex) {
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
@@ -94,7 +94,7 @@ function shuffle(array) {
 }
 
 function checkFlipped() {
-    var allFlipped = true;
+    let allFlipped = true;
     document.querySelectorAll(".card").forEach(function (elem) {
         if (!elem.classList.contains('is-flipped')) {
             allFlipped = false;
@@ -107,12 +107,12 @@ function checkFlipped() {
     }
 }
 
-document.getElementById("board-generate").addEventListener("click", Generate);
+document.querySelector("#board-generate").addEventListener("click", Generate);
 
 function Generate() {
-    var rows = document.getElementById("board-rows").options[document.getElementById("board-rows").selectedIndex].text;
-    var columns = document.getElementById("board-columns").options[document.getElementById("board-columns").selectedIndex].text;
-    var difficulty = document.getElementById("difficulty").options[document.getElementById("difficulty").selectedIndex].value;
+    let rows = document.querySelector("#board-rows").options[document.querySelector("#board-rows").selectedIndex].text;
+    let columns = document.querySelector("#board-columns").options[document.querySelector("#board-columns").selectedIndex].text;
+    let difficulty = document.querySelector("#difficulty").options[document.querySelector("#difficulty").selectedIndex].value;
 
     if (!isNaN(rows) && !isNaN(columns) && ((rows * columns) % 2) == 0 && difficulty != "") {
         generation(rows, columns, difficulty);
